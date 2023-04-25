@@ -9,7 +9,7 @@ local astroevent = utils.event
 
 vim.on_key(function(char)
   if vim.fn.mode() == "n" then
-    local new_hlsearch = vim.tbl_contains({ "<CR>", "n", "N", "*", "#", "?", "/" }, vim.fn.keytrans(char))
+    local new_hlsearch = vim.list_contains({ "<CR>", "n", "N", "*", "#", "?", "/" }, vim.fn.keytrans(char))
     if vim.opt.hlsearch:get() ~= new_hlsearch then vim.opt.hlsearch = new_hlsearch end
   end
 end, namespace "auto_hlsearch")
@@ -21,7 +21,7 @@ autocmd({ "BufAdd", "BufEnter", "TabNewEntered" }, {
   callback = function(args)
     if not vim.t.bufs then vim.t.bufs = {} end
     local bufs = vim.t.bufs
-    if not vim.tbl_contains(bufs, args.buf) then
+    if not vim.list_contains(bufs, args.buf) then
       table.insert(bufs, args.buf)
       vim.t.bufs = bufs
     end
@@ -74,7 +74,7 @@ autocmd("BufWinEnter", {
       local filetype = vim.api.nvim_get_option_value("filetype", { buf = event.buf })
       local buftype = vim.api.nvim_get_option_value("buftype", { buf = event.buf })
       local ignore_filetypes = { "gitcommit", "gitrebase", "svg", "hgcommit" }
-      if buftype == "" and filetype and filetype ~= "" and not vim.tbl_contains(ignore_filetypes, filetype) then
+      if buftype == "" and filetype and filetype ~= "" and not vim.list_contains(ignore_filetypes, filetype) then
         vim.b[event.buf].view_activated = true
         vim.cmd.loadview { mods = { emsg_silent = true } }
       end

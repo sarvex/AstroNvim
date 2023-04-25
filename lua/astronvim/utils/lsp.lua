@@ -10,7 +10,7 @@
 -- @license GNU General Public License v3.0
 
 local M = {}
-local tbl_contains = vim.tbl_contains
+local list_contains = vim.list_contains
 local tbl_isempty = vim.tbl_isempty
 local user_opts = astronvim.user_opts
 
@@ -70,7 +70,7 @@ M.format_opts.filter = function(client)
   local filter = M.formatting.filter
   local disabled = M.formatting.disabled or {}
   -- check if client is fully disabled or filtered by function
-  return not (vim.tbl_contains(disabled, client.name) or (type(filter) == "function" and not filter(client)))
+  return not (vim.list_contains(disabled, client.name) or (type(filter) == "function" and not filter(client)))
 end
 
 --- Helper function to set up a given server with the Neovim LSP client
@@ -84,7 +84,7 @@ M.setup = function(server)
   end
   local opts = M.config(server)
   local setup_handler = setup_handlers[server] or setup_handlers[1]
-  if not vim.tbl_contains(astronvim.lsp.skip_setup, server) and setup_handler then setup_handler(server, opts) end
+  if not vim.list_contains(astronvim.lsp.skip_setup, server) and setup_handler then setup_handler(server, opts) end
 end
 
 local function add_buffer_autocmd(augroup, bufnr, autocmds)
@@ -178,7 +178,7 @@ M.on_attach = function(client, bufnr)
     }
   end
 
-  if capabilities.documentFormattingProvider and not tbl_contains(M.formatting.disabled, client.name) then
+  if capabilities.documentFormattingProvider and not list_contains(M.formatting.disabled, client.name) then
     lsp_mappings.n["<leader>lf"] = {
       function() vim.lsp.buf.format(M.format_opts) end,
       desc = "Format buffer",
@@ -195,8 +195,8 @@ M.on_attach = function(client, bufnr)
     local filetype = vim.api.nvim_get_option_value("filetype", { buf = bufnr })
     if
       autoformat.enabled
-      and (tbl_isempty(autoformat.allow_filetypes or {}) or tbl_contains(autoformat.allow_filetypes, filetype))
-      and (tbl_isempty(autoformat.ignore_filetypes or {}) or not tbl_contains(autoformat.ignore_filetypes, filetype))
+      and (tbl_isempty(autoformat.allow_filetypes or {}) or list_contains(autoformat.allow_filetypes, filetype))
+      and (tbl_isempty(autoformat.ignore_filetypes or {}) or not list_contains(autoformat.ignore_filetypes, filetype))
     then
       add_buffer_autocmd("lsp_auto_format", bufnr, {
         events = "BufWritePre",

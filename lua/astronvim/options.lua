@@ -1,9 +1,7 @@
 vim.opt.viewoptions:remove "curdir" -- disable saving current directory with views
 vim.opt.shortmess:append { s = true, I = true } -- disable startup message
 vim.opt.backspace:append { "nostop" } -- Don't stop backspace at insert
-if vim.fn.has "nvim-0.9" == 1 then
-  vim.opt.diffopt:append "linematch:60" -- enable linematch diff algorithm
-end
+vim.opt.diffopt:append "linematch:60" -- enable linematch diff algorithm
 local options = astronvim.user_opts("options", {
   opt = {
     breakindent = true, -- Wrap indent to match  line start
@@ -18,7 +16,7 @@ local options = astronvim.user_opts("options", {
     foldenable = true, -- enable fold for nvim-ufo
     foldlevel = 99, -- set high foldlevel for nvim-ufo
     foldlevelstart = 99, -- start with all code unfolded
-    foldcolumn = vim.fn.has "nvim-0.9" == 1 and "1" or nil, -- show foldcolumn in nvim 0.9
+    foldcolumn = "1", -- show foldcolumn in nvim 0.9
     history = 100, -- Number of commands to remember in a history table
     ignorecase = true, -- Case insensitive searching
     infercase = true, -- Infer cases in keyword completion
@@ -38,7 +36,7 @@ local options = astronvim.user_opts("options", {
     smartcase = true, -- Case sensitivie searching
     smartindent = true, -- Smarter autoindentation
     splitbelow = true, -- Splitting a new window below the current one
-    splitkeep = vim.fn.has "nvim-0.9" == 1 and "screen" or nil, -- Maintain code view when splitting
+    splitkeep = "screen", -- Maintain code view when splitting
     splitright = true, -- Splitting a new window at the right of the current one
     tabstop = 2, -- Number of space in a tab
     termguicolors = true, -- Enable 24-bit RGB color in the TUI
